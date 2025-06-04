@@ -1,0 +1,17 @@
+---
+ name: Actions Run with direnv
+ on: [push]
+
+ jobs:
+   test:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+       - name: Setup direnv
+         run: |
+           sudo apt-get install direnv
+           direnv allow .
+           direnv exec . sh -c "echo $PATH" > "$GITHUB_PATH"
+           direnv export gha >> "$GITHUB_ENV"
+       - name: Test
+         run: echo "$FOO" | grep "foo"
